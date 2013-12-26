@@ -1,0 +1,22 @@
+{
+  "name": "bookshelf-hackery",
+  "version": "0.0.0",
+  "description": "Tiny example of express + bookshelf",
+  "main": "index.js",
+  "dependencies": {
+    "bookshelf": "~0.6.2",
+    "express": "~3.4.7",
+    "sqlite3": "~2.1.19",
+    "bootstrap": "0.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NotBobTheBuilder/bookshelf-hackery"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "\"Jack Wearden\" <jack@jackwearden.co.uk>",
+  "license": "MIT"
+}
