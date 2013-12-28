@@ -1,39 +1,41 @@
-var Bookshelf = require('bookshelf'),
-    express   = require('express'),
-    app       = express();
+/*
+ * Ensure you run `sqlite3 -init sql.sql hackery.sqlite`
+ * before running this example :)
+ */
+var express   = require('express'),
+    app       = express(),
+    models    = require('./models');
 
-app.use(express.bodyParser());
-
-var db = Bookshelf.initialize({
-  client: "sqlite3",
-  connection: {
-    filename: "./hackery.sqlite"
-  }
-});
-
-var User = db.Model.extend({
-  tableName: 'users'
-});
-
-var Users = db.Collection.extend({
-  model: User
+app.get('/talks', function(req, res) {
+  new models.Talk.Talks()
+    .fetch({ withRelated: ['users'] })
+    .then(function(talks) {
+      res.json(talks.toJSON());
+  });
 });
 
 app.get('/users', function(req, res) {
-  new Users().fetch().then(function(users){
-    res.json(users.toJSON());
+  new models.User.Users()
+    .fetch({ withRelated: ['talks'] })
+    .then(function(users) {
+      res.json(users.toJSON());
   });
 });
 
-app.get('/users/:id', function(req, res) {
-  new User({id: req.params.id}).fetch().then(function(user) {
-    res.json(user.toJSON());
-  });
-});
-
-app.post('/users', function(req, res) {
-  new User({name: req.body.name}).save();
-  res.send(200, "");
+/* hacky way to create new users.
+ * next example will be cleaner
+ */
+app.get('/new', function(req, res) {
+  models.User.User.forge({"name": "Neo"})
+    .save()
+    .then(function(user) {
+      return user
+        .related('talks')
+        .create({"title": "a great talk"})
+        .yield(user);
+    }).then(function(user) {
+      res.send(200);
+    });
 });
 
 app.listen(3456);
