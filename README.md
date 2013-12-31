@@ -7,4 +7,4 @@ master branch was my first attempt, everything therafter is numbered by order of
 
 Examples so far:
 
-1. Basic relations - 2 models with a many-many relationship. 
+1. **Basic relations**: two models with a many-many relationship. 
